@@ -1,13 +1,12 @@
-let timeLeft = 1500; // 25 minuti
+let timeLeft = 1500;
 let timerId = null;
-
-// --- AGGIUNTA: Carica il suono della campana ---
 const bell = new Audio('https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3');
 
 const timerDisplay = document.getElementById('timer');
 const startBtn = document.getElementById('start');
 const resetBtn = document.getElementById('reset');
-const container = document.querySelector('.glass-container'); // Per l'effetto visivo
+const minutesInput = document.getElementById('minutesInput');
+const container = document.querySelector('.glass-container');
 
 function updateDisplay() {
     const minutes = Math.floor(timeLeft / 60);
@@ -17,26 +16,33 @@ function updateDisplay() {
 
 startBtn.addEventListener('click', () => {
     if (timerId === null) {
+        // Se il timer è fermo, aggiorna timeLeft con l'input dell'utente
+        if (timeLeft === 1500 || timeLeft === parseInt(minutesInput.value) * 60) {
+            timeLeft = parseInt(minutesInput.value) * 60;
+            updateDisplay();
+        }
+
         startBtn.textContent = 'Pausa';
-        // --- AGGIUNTA: Attiva l'effetto pulsante ---
         container.classList.add('pulse');
         
         timerId = setInterval(() => {
-            timeLeft--;
-            updateDisplay();
-            if (timeLeft === 0) {
+            if (timeLeft > 0) {
+                timeLeft--;
+                updateDisplay();
+            } else {
                 clearInterval(timerId);
-                // --- AGGIUNTA: Suona la campana alla fine ---
-                bell.play(); 
+                timerId = null;
+                bell.play();
                 container.classList.remove('pulse');
-                alert("Tempo scaduto! Namasté.");
+                startBtn.textContent = 'Start';
+                alert("Tempo scaduto!");
             }
         }, 1000);
     } else {
+        // Pausa
         clearInterval(timerId);
         timerId = null;
         startBtn.textContent = 'Riprendi';
-        // --- AGGIUNTA: Ferma l'effetto pulsante in pausa ---
         container.classList.remove('pulse');
     }
 });
@@ -44,8 +50,16 @@ startBtn.addEventListener('click', () => {
 resetBtn.addEventListener('click', () => {
     clearInterval(timerId);
     timerId = null;
-    timeLeft = 1500;
+    timeLeft = parseInt(minutesInput.value) * 60;
     updateDisplay();
     startBtn.textContent = 'Start';
     container.classList.remove('pulse');
+});
+
+// Aggiorna il tempo mentre l'utente cambia i minuti nell'input
+minutesInput.addEventListener('change', () => {
+    if (timerId === null) {
+        timeLeft = parseInt(minutesInput.value) * 60;
+        updateDisplay();
+    }
 });
