@@ -1,3 +1,4 @@
+alert("Il file JS è caricato correttamente!");
 let timeLeft = 1500;
 let timerId = null;
 const bell = new Audio('https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3');
