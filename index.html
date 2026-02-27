@@ -1,32 +1,25 @@
-<!DOCTYPE html>
-<html lang="it">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vibe Timer</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="manifest" href="manifest.json">
-</head>
-<body>
-    <div class="background">
-        <div class="glass-container">
-            <h1 class="brand-title">Timer</h1>
-            
-            <div class="picker-wrapper">
-                <div class="wheel" id="wheel-h"></div>
-                <div class="wheel" id="wheel-m"></div>
-                <div class="wheel" id="wheel-s"></div>
-                <div class="selection-indicator"></div>
-            </div>
-            
-            <div class="timer-display" id="timer">00:00:00</div>
-            
-            <div class="controls">
-                <button id="start" class="btn-main">Start</button>
-                <button id="reset" class="btn-sub">Reset</button>
-            </div>
+<div class="glass-container">
+    <h1 class="brand-title">Timer</h1>
+    
+    <div class="picker-wrapper">
+        <div class="picker-column">
+            <input type="number" id="h-input" value="00" min="0" max="23" placeholder="00">
+            <span>ore</span>
+        </div>
+        <div class="picker-column">
+            <input type="number" id="m-input" value="00" min="0" max="59" placeholder="00">
+            <span>min</span>
+        </div>
+        <div class="picker-column">
+            <input type="number" id="s-input" value="00" min="0" max="59" placeholder="00">
+            <span>sec</span>
         </div>
     </div>
-    <script src="script.js"></script>
-</body>
-</html>
+    
+    <div class="timer-display" id="timer">00:00:00</div>
+    
+    <div class="controls">
+        <button id="start" class="btn-main">Start</button>
+        <button id="reset" class="btn-sub">Reset</button>
+    </div>
+</div>
