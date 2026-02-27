@@ -1,29 +1,34 @@
 document.addEventListener('DOMContentLoaded', () => {
-    let timeLeft = 1500;
+    let timeLeft = 0;
     let timerId = null;
     const bell = new Audio('https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3');
 
     const timerDisplay = document.getElementById('timer');
     const startBtn = document.getElementById('start');
-    const resetBtn = document.getElementById('reset');
-    const minutesInput = document.getElementById('minutesInput');
+    const hIn = document.getElementById('hoursInput');
+    const mIn = document.getElementById('minutesInput');
+    const sIn = document.getElementById('secondsInput');
     const container = document.querySelector('.glass-container');
 
     function updateDisplay() {
-        const minutes = Math.floor(timeLeft / 60);
-        const seconds = timeLeft % 60;
-        timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        const h = Math.floor(timeLeft / 3600);
+        const m = Math.floor((timeLeft % 3600) / 60);
+        const s = timeLeft % 60;
+        timerDisplay.textContent = 
+            `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
     }
 
     startBtn.addEventListener('click', () => {
         if (timerId === null) {
-            // Se il timer è fermo o è stato appena resettato, prendi il valore dall'input
-            if (timeLeft === 1500 || timeLeft === parseInt(minutesInput.value) * 60) {
-                timeLeft = parseInt(minutesInput.value) * 60;
-                updateDisplay();
-            }
+            // Calcola il tempo totale dai 3 input
+            const totalSeconds = (parseInt(hIn.value) * 3600) + (parseInt(mIn.value) * 60) + parseInt(sIn.value);
+            
+            if (totalSeconds <= 0) return;
 
+            if (timeLeft <= 0) timeLeft = totalSeconds;
+            
             startBtn.textContent = 'Pausa';
+            startBtn.style.background = '#333';
             container.classList.add('pulse');
             
             timerId = setInterval(() => {
@@ -33,9 +38,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else {
                     clearInterval(timerId);
                     timerId = null;
-                    bell.play().catch(e => console.log("Audio blocked by browser"));
+                    bell.play();
                     container.classList.remove('pulse');
                     startBtn.textContent = 'Start';
+                    startBtn.style.background = '#ff9f0a';
                     alert("Tempo scaduto!");
                 }
             }, 1000);
@@ -43,23 +49,18 @@ document.addEventListener('DOMContentLoaded', () => {
             clearInterval(timerId);
             timerId = null;
             startBtn.textContent = 'Riprendi';
+            startBtn.style.background = '#ff9f0a';
             container.classList.remove('pulse');
         }
     });
 
-    resetBtn.addEventListener('click', () => {
+    document.getElementById('reset').addEventListener('click', () => {
         clearInterval(timerId);
         timerId = null;
-        timeLeft = parseInt(minutesInput.value) * 60;
+        timeLeft = 0;
         updateDisplay();
         startBtn.textContent = 'Start';
+        startBtn.style.background = '#ff9f0a';
         container.classList.remove('pulse');
-    });
-
-    minutesInput.addEventListener('change', () => {
-        if (timerId === null) {
-            timeLeft = parseInt(minutesInput.value) * 60;
-            updateDisplay();
-        }
     });
 });
