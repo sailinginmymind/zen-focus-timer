@@ -1,36 +1,52 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const wheels = {
+        h: document.getElementById('wheel-h'),
+        m: document.getElementById('wheel-m'),
+        s: document.getElementById('wheel-s')
+    };
+    
     let timeLeft = 0;
     let timerId = null;
     const bell = new Audio('https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3');
 
-    const timerDisplay = document.getElementById('timer');
+    // Genera i numeri nelle ruote
+    function populateWheel(element, max) {
+        element.innerHTML = '<div></div>'; // Spazio vuoto sopra
+        for (let i = 0; i <= max; i++) {
+            const div = document.createElement('div');
+            div.textContent = i.toString().padStart(2, '0');
+            element.appendChild(div);
+        }
+        element.innerHTML += '<div></div>'; // Spazio vuoto sotto
+    }
+
+    populateWheel(wheels.h, 23);
+    populateWheel(wheels.m, 59);
+    populateWheel(wheels.s, 59);
+
+    function getSelectedValues() {
+        const h = Math.round(wheels.h.scrollTop / 50);
+        const m = Math.round(wheels.m.scrollTop / 50);
+        const s = Math.round(wheels.s.scrollTop / 50);
+        return (h * 3600) + (m * 60) + s;
+    }
+
     const startBtn = document.getElementById('start');
-    const hIn = document.getElementById('hoursInput');
-    const mIn = document.getElementById('minutesInput');
-    const sIn = document.getElementById('secondsInput');
-    const container = document.querySelector('.glass-container');
+    const timerDisplay = document.getElementById('timer');
 
     function updateDisplay() {
         const h = Math.floor(timeLeft / 3600);
         const m = Math.floor((timeLeft % 3600) / 60);
         const s = timeLeft % 60;
-        timerDisplay.textContent = 
-            `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+        timerDisplay.textContent = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
     }
 
     startBtn.addEventListener('click', () => {
         if (timerId === null) {
-            // Calcola il tempo totale dai 3 input
-            const totalSeconds = (parseInt(hIn.value) * 3600) + (parseInt(mIn.value) * 60) + parseInt(sIn.value);
-            
-            if (totalSeconds <= 0) return;
+            if (timeLeft <= 0) timeLeft = getSelectedValues();
+            if (timeLeft <= 0) return;
 
-            if (timeLeft <= 0) timeLeft = totalSeconds;
-            
             startBtn.textContent = 'Pausa';
-            startBtn.style.background = '#333';
-            container.classList.add('pulse');
-            
             timerId = setInterval(() => {
                 if (timeLeft > 0) {
                     timeLeft--;
@@ -39,9 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     clearInterval(timerId);
                     timerId = null;
                     bell.play();
-                    container.classList.remove('pulse');
                     startBtn.textContent = 'Start';
-                    startBtn.style.background = '#ff9f0a';
                     alert("Tempo scaduto!");
                 }
             }, 1000);
@@ -49,8 +63,6 @@ document.addEventListener('DOMContentLoaded', () => {
             clearInterval(timerId);
             timerId = null;
             startBtn.textContent = 'Riprendi';
-            startBtn.style.background = '#ff9f0a';
-            container.classList.remove('pulse');
         }
     });
 
@@ -60,7 +72,9 @@ document.addEventListener('DOMContentLoaded', () => {
         timeLeft = 0;
         updateDisplay();
         startBtn.textContent = 'Start';
-        startBtn.style.background = '#ff9f0a';
-        container.classList.remove('pulse');
+        // Reset rullini a 0
+        wheels.h.scrollTo({top: 0, behavior: 'smooth'});
+        wheels.m.scrollTo({top: 0, behavior: 'smooth'});
+        wheels.s.scrollTo({top: 0, behavior: 'smooth'});
     });
 });
