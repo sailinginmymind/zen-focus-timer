@@ -3,33 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zen Focus Timer</title>
+    <title>Vibe Timer</title>
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json">
 </head>
 <body>
     <div class="background">
         <div class="glass-container">
-            <h1>Focus</h1>
-            <div class="input-group">
-                <input type="number" id="minutesInput" value="25" min="1" max="60">
-                <span>min</span>
+            <h1 class="brand-title">Timer</h1>
+            
+            <div class="picker-container">
+                <div class="picker-column">
+                    <input type="number" id="hoursInput" value="0" min="0" max="23">
+                    <span>ore</span>
+                </div>
+                <div class="picker-column">
+                    <input type="number" id="minutesInput" value="25" min="0" max="59">
+                    <span>min</span>
+                </div>
+                <div class="picker-column">
+                    <input type="number" id="secondsInput" value="0" min="0" max="59">
+                    <span>sec</span>
+                </div>
             </div>
             
-            <div class="timer-display" id="timer">25:00</div>
+            <div class="timer-display" id="timer">00:25:00</div>
             
             <div class="controls">
-                <button id="start">Start</button>
-                <button id="reset">Reset</button>
+                <button id="start" class="btn-main">Start</button>
+                <button id="reset" class="btn-sub">Reset</button>
             </div>
         </div>
     </div>
-
     <script src="script.js"></script>
-    <script>
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('./sw.js');
-        }
-    </script>
 </body>
 </html>
