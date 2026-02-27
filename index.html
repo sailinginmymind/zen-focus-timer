@@ -12,22 +12,14 @@
         <div class="glass-container">
             <h1 class="brand-title">Timer</h1>
             
-            <div class="picker-container">
-                <div class="picker-column">
-                    <input type="number" id="hoursInput" value="0" min="0" max="23">
-                    <span>ore</span>
-                </div>
-                <div class="picker-column">
-                    <input type="number" id="minutesInput" value="25" min="0" max="59">
-                    <span>min</span>
-                </div>
-                <div class="picker-column">
-                    <input type="number" id="secondsInput" value="0" min="0" max="59">
-                    <span>sec</span>
-                </div>
+            <div class="picker-wrapper">
+                <div class="wheel" id="wheel-h"></div>
+                <div class="wheel" id="wheel-m"></div>
+                <div class="wheel" id="wheel-s"></div>
+                <div class="selection-indicator"></div>
             </div>
             
-            <div class="timer-display" id="timer">00:25:00</div>
+            <div class="timer-display" id="timer">00:00:00</div>
             
             <div class="controls">
                 <button id="start" class="btn-main">Start</button>
